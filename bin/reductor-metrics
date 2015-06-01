@@ -1,0 +1,8 @@
+#!/bin/bash
+
+ROOTDIR=/opt/reductor_influxdb_agent/
+
+time=$(date +%s)
+mkdir -p $ROOTDIR/var/metrics
+$ROOTDIR/bin/_reductor-metrics > /tmp/reductor-metrics.$time
+mv -f /tmp/reductor-metrics.$time $ROOTDIR/var/metrics/$time

@@ -7,8 +7,8 @@ if len(sys.argv) != 2:
 
 with open(sys.argv[1], 'r') as plaintext:
     request_data = {}
-    request_data['name'] = 'timers'
-    request_data['columns'] = [ 'name', 'exectime', 'result' ]
+    request_data['name'] = 'metrics'
+    request_data['columns'] = [ 'name', 'value', 'retval' ]
     request_data['points'] = []
     for line in plaintext.readlines():
         request_data['points'].append(line.strip().split(' '))
