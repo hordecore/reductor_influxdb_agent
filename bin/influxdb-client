@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#defaults
+ROOTDIR=/opt/reductor_time_tests/
+. $ROOTDIR/etc/influxdb-client.conf
+
+plaintext2json() {
+	echo convert plain $1 to json
+}
+
+sendplaintext() {
+	plaintext2json $1
+	sendjson $1
+}
+
+sendjson() {
+	echo send json $1
+	return 0
+	curl -X POST -d - "http://$ip:$port/db/reductor_time_tests/series?u=$login&p=$password"
+}
+#argsparse
+while [ "$#" != 0 ]; do
+	if [[ "$1" = "--rootdir="* ]]; then
+		ROOTDIR="${1#*=}"
+		shift
+	elif [[ "$1" = "--json="* ]]; then
+		JSON="${1#*=}"
+		shift
+	elif [[ "$1" = "--plain="* ]]; then
+		PLAIN="${1#*=}"
+		shift
+	fi
+done
+
+[ -z "$JSON" -a -z "$PLAIN" ] && exit 1
+[ -z "$ROOTDIR" ] && exit 2
+[ -z "$ip" -o -z "$port" -o -z "$login" -o -z "$password" ] && exit 3
+
+if [ -n "$JSON" ]; then
+	sendjson "$JSON"
+elif [ -n "$PLAIN" ]; then
+	sendplaintext "$PLAIN"
+else
+	exit 4
+fi

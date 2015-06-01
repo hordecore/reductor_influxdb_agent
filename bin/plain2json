@@ -1,0 +1,13 @@
+#!/bin/bash
+
+ROOTDIR=/opt/reductor_time_tests/
+
+while IFS='' read -r line; do
+	if [[ "$line" = *@@@points@@@* ]]; then
+		while IFS=' ' read -r name time result; do
+			echo -e '\t\t\t\t[ "'$name'", '$time, $result' ]'
+		done < "$1"
+		continue
+	fi
+	echo "$line"
+done < $ROOTDIR/usr/json.tmplt

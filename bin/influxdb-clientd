@@ -1,0 +1,14 @@
+#!/bin/bash
+
+ROOTDIR=/opt/reductor_time_tests/
+while sleep 1; do
+	datafile="$(find $ROOTDIR/var/tests/ -type f | head -1)"
+	if [ -z "$datafile" ]; then
+		continue
+	fi
+	$ROOTDIR/bin/influxdb-client --rootdir=$ROOTDIR --plain=$datafile
+	retval=$?
+	if [ "$retval" != '0' ]; then
+		echo error $retval
+	fi
+done
