@@ -1,0 +1,7 @@
+#!/bin/bash
+
+ROOTDIR=/opt/reductor_time_tests/
+
+while read normaltime maxtime name command; do
+	
+done < $ROOTDIR/etc/timetester.conf
