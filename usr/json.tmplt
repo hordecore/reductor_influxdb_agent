@@ -1,7 +1,7 @@
 [
 	{
 		"name":"timers",
-		"columns":["name, time, result"],
+		"columns":["name", "exectime", "result"],
 		"points":[
 			@@@points@@@
 		]

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ROOTDIR=/opt/reductor_time_tests/
+
+while read normaltime maxtime name command; do
+	[ "${normaltime:0:1}" = '#' ] && continue
+	/usr/bin/time -o /tmp/timetester.tmp -f "%e" timeout -s 15 ${maxtime}s $command &>/dev/null
+	read exec_time < /tmp/timetester.tmp
+	retval=$?
+	echo $name $exec_time $retval
+done < $ROOTDIR/etc/timetester.conf
