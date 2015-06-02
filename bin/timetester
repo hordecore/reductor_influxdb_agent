@@ -1,7 +1,0 @@
-#!/bin/bash
-
-ROOTDIR=/opt/reductor_time_tests/
-
-time=$(date +%s)
-$ROOTDIR/bin/_timetester > /tmp/timetester.$time
-mv -f /tmp/timetester.$time $ROOTDIR/var/tests/$time
