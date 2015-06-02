@@ -1,3 +1,5 @@
-# reductor_influxdb_agent
+# reductor influxdb agent
 
 simple influxdb client for carbon reductor + daemon + metric collector
+
+curl / python / bash
