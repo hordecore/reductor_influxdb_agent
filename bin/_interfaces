@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for iface in $(egrep -o eth[0-9]+ /proc/net/dev); do
+	IFS=' :' read if rxb rxp error drop fifo tmp <<< "$(grep -w $iface /proc/net/dev)"
+	echo $if $rxb $rxp $error $drop $fifo
+done

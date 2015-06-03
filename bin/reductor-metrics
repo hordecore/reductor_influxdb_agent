@@ -6,3 +6,6 @@ time=$(date +%s)
 mkdir -p $ROOTDIR/var/metrics
 $ROOTDIR/bin/_reductor-metrics > /tmp/reductor-metrics.$time
 mv -f /tmp/reductor-metrics.$time $ROOTDIR/var/metrics/$time
+$ROOTDIR/bin/_interfaces > /tmp/reductor-metrics-interfaces.$time
+python $ROOTDIR/bin/interface2json /tmp/reductor-metrics-interfaces.$time > /tmp/reductor-metrics-interfaces.$time.json
+mv -f /tmp/reductor-metrics-interfaces.$time.json $ROOTDIR/var/metrics/interfaces.$time.json

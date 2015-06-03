@@ -1,0 +1,22 @@
+import json
+import sys
+import re
+
+if len(sys.argv) != 2:
+    print "Usage: " + sys.argv[0] + " <plaintext file>"
+    exit(1)
+
+def str2int(item):
+    if isinstance(item, str) and re.match('[0-9]+', item):
+        return int(item)
+    return item
+
+with open(sys.argv[1], 'r') as plaintext:
+    request_data = {}
+    request_data['name'] = 'interfaces'
+    request_data['columns'] = [ 'interface', 'rxbytes', 'rxpackets', 'errors', 'dropped', 'fifo' ]
+    request_data['points'] = []
+    for line in plaintext.readlines():
+        data = map(str2int, line.strip().split(' '))
+        request_data['points'].append(data)
+    print json.dumps([ request_data ], indent=2)

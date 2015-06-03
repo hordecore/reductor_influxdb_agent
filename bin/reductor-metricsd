@@ -1,0 +1,15 @@
+#!/bin/bash
+
+ROOTDIR=/opt/reductor_influxdb_agent/
+while sleep 5; do
+	$ROOTDIR/bin/reductor-metrics
+	retval=$?
+	if [ "$retval" != '0' ]; then
+		echo $(date) error $retval
+		continue
+	fi
+	date="$(date +%s)"
+	if [ "$((date % 30))" == 0 ]; then
+		echo $((date)) work fine
+	fi
+done
