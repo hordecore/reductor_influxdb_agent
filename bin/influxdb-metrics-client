@@ -4,9 +4,7 @@ ROOTDIR=/opt/reductor_influxdb_agent/
 . $ROOTDIR/etc/influxdb-client.conf
 
 while [ "$#" != 0 ]; do
-	if [[ "$1" = "--rootdir="* ]]; then
-		ROOTDIR="${1#*=}"
-	elif [[ "$1" = "--json="* ]]; then
+	if [[ "$1" = "--json="* ]]; then
 		JSON="${1#*=}"
 	elif [[ "$1" = "--plain="* ]]; then
 		PLAIN="${1#*=}"
