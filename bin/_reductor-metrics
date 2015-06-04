@@ -1,13 +1,11 @@
 #!/bin/bash
 
-ROOTDIR=/opt/reductor_influxdb_agent/
-
 while read name command; do
 	[ "${name:0:1}" = '#' ] && continue
-	date=$(date +%s)
-	eval "$command" > /tmp/reductor_influxdb_agent.$date
+	tmpfile=/tmp/reductor_influxdb_agent.$(date +%s)
+	eval "$command" > $tmpfile
 	retval=$?
-	read value < /tmp/reductor_influxdb_agent.$date
-	rm -f /tmp/reductor_influxdb_agent.$date
+	read value < $tmpfile
+	rm -f $tmpfile
 	echo $name $value $retval
-done < $ROOTDIR/etc/reductor-metrics.conf
+done < /opt/reductor_influxdb_agent/etc/reductor-metrics.conf
