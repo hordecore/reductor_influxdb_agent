@@ -1,16 +1,9 @@
 #!/bin/bash
 
-ROOTDIR=/opt/reductor_influxdb_agent/
 while sleep 1; do
 	datafile="$(find $ROOTDIR/var/metrics/ -type f | head -1)"
-	if [ -z "$datafile" ]; then
-		continue
-	fi
-	$ROOTDIR/bin/influxdb-metrics-client --rootdir=$ROOTDIR --plain=$datafile
+	[ -z "$datafile" ] && continue
+	/opt/reductor_influxdb_agent/bin/influxdb-metrics-client --plain=$datafile
 	retval=$?
-	if [ "$retval" != '0' ]; then
-		echo error $retval
-	else
-		echo $datafile sent ok
-	fi
+	[ "$retval" != '0' ] && echo $(date) $datafile error ($retval) || echo $(date) $datafile sent ok
 done
