@@ -1,8 +1,6 @@
 #!/bin/bash
 
-ROOTDIR=/opt/reductor_influxdb_agent
-
-for service in $(find $ROOTDIR/etc/rc.d/init.d/ -type f); do
+for service in $(find /opt/reductor_influxdb_agent/etc/rc.d/init.d/ -type f); do
 	ln -sf $service /etc/rc.d/init.d/
 	chkconfig --level 345 ${service##*/} on
 	service ${service##*/} restart
