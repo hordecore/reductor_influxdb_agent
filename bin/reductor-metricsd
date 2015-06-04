@@ -1,8 +1,7 @@
 #!/bin/bash
 
 while sleep 5; do
-	/opt/reductor_influxdb_agent/bin/reductor-metrics
-	retval=$?
-	[ "$retval" != '0' ] && echo $(date) error $retval && continue
-	[ "$(($(date +%s) % 30))" == 0 ] && echo $(date) work fine
+	date=$(date)
+	/opt/reductor_influxdb_agent/bin/reductor-metrics || echo $date error $?
+	[ "$((date % 100))" = 0 ] && echo $date still work
 done
