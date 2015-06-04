@@ -1,51 +1,33 @@
 #!/bin/bash
 
-#defaults
 ROOTDIR=/opt/reductor_influxdb_agent/
-
 . $ROOTDIR/etc/influxdb-client.conf
 
-plaintext2json() {
-	if grep -q '"' $1; then
-		echo "В $1 итак json"
-		return 0
-	fi
-	python $ROOTDIR/bin/plain2json.py $1 > $1.json
-	mv -f $1.json $1
-	sync
-}
-
-sendplaintext() {
-	plaintext2json $1
-	sendjson $1
-}
-
-sendjson() {
-	curl -sSX POST -d "$(<$1)" "http://$ip:$port/db/$database/series?u=$login&p=$password" && rm -f "$1"
-}
-
-#argsparse
 while [ "$#" != 0 ]; do
 	if [[ "$1" = "--rootdir="* ]]; then
 		ROOTDIR="${1#*=}"
-		shift
 	elif [[ "$1" = "--json="* ]]; then
 		JSON="${1#*=}"
-		shift
 	elif [[ "$1" = "--plain="* ]]; then
 		PLAIN="${1#*=}"
-		shift
+	else
+		echo "$1 not supported" >&2
 	fi
+	shift
 done
 
 [ -z "$JSON" -a -z "$PLAIN" ] && exit 1
 [ -z "$ROOTDIR" ] && exit 2
 [ -z "$ip" -o -z "$port" -o -z "$login" -o -z "$password" ] && exit 3
 
-if [ -n "$JSON" ]; then
-	sendjson "$JSON"
-elif [ -n "$PLAIN" ]; then
-	sendplaintext "$PLAIN"
-else
-	exit 4
+if [ -n "$PLAIN" ]; then
+	if ! grep -q '"' "$PLAIN"; then
+		python $ROOTDIR/bin/plain2json.py "$PLAIN" > "$PLAIN.json"
+		mv -f "$PLAIN.json" "$PLAIN"
+	fi
+	JSON="$PLAIN"
 fi
+
+[ -z "$JSON" ] && exit 4
+
+curl -sSX POST -d "$(<$JSON)" "http://$ip:$port/db/$database/series?u=$login&p=$password" && rm -f "$JSON"
